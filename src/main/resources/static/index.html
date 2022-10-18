@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="en">
+	<head>
+	    <meta charset="utf-8"/>
+	    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+	    <title>Demo</title>
+	    <meta name="description" content=""/>
+	    <meta name="viewport" content="width=device-width"/>
+	    <base href="/"/>
+	    <link rel="stylesheet" type="text/css" href="/webjars/bootstrap/css/bootstrap.min.css"/>
+	    <script type="text/javascript" src="/webjars/jquery/jquery.min.js"></script>
+	    <script type="text/javascript" src="/webjars/bootstrap/js/bootstrap.min.js"></script>
+		<script type="text/javascript" src="/webjars/js-cookie/js.cookie.js"></script>
+	</head>
+	<body>
+		<h1>OAuth2.0 OIDC Login Demo</h1>
+		<div class="container unauthenticated">
+		    Login with Netsuite: <a href="/oauth2/authorization/netsuite">click here</a><br/>
+		    Test mocked userinfo: <a href="/netsuite/auth/oauth2/v1/userinfo">click here</a>
+		</div>
+		<div class="container authenticated" style="display:none">
+		    Logged in as: <span id="user"></span>
+			<div>
+				<a href="/netsuite/q">Netsuite Query</a>
+				<button onClick="query()" class="btn btn-primary">Query</button>
+				<button onClick="logout()" class="btn btn-secondary">Logout</button>
+			  </div>
+		  </div>
+		  Result is:
+		  <pre id="result">
+		  </pre>
+	  </div>
+
+	</body>
+	<script type="text/javascript">
+		$.get("/user", function(data) {
+			$("#user").html(data.name);
+			$(".unauthenticated").hide()
+			$(".authenticated").show()
+		});
+		var logout = function() {
+    		$.post("/logout", function() {
+				$("#user").html('');
+				$("#result").html('');
+				$(".unauthenticated").show();
+				$(".authenticated").hide();
+			})
+    		return true;
+		}
+		var query = function() {
+    		$.get("/netsuite/q", function(data) {
+				console.log("data: ",data);
+				console.log("calling ", data);
+				$("#result").html(JSON.stringify(data, undefined, 4));
+				console.log("called")
+			})
+    		return true;
+		}
+		$.ajaxSetup({
+			beforeSend : function(xhr, settings) {
+				if (settings.type == 'POST' || settings.type == 'PUT'
+					|| settings.type == 'DELETE') {
+					if (!(/^http:.*/.test(settings.url) || /^https:.*/
+						.test(settings.url))) {
+						// Only send the token to relative URLs i.e. locally.
+						xhr.setRequestHeader("X-XSRF-TOKEN",
+						Cookies.get('XSRF-TOKEN'));
+					}
+				}
+			}
+		});
+	</script>
+</html>

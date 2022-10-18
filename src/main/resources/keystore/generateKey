@@ -1,0 +1,3 @@
+#!/bin/sh
+
+keytool -genkeypair -alias netsuite-oauth -keyalg RSA -keysize 2048 -dname "CN=localhost, OU=Organization, O=Company Name, L=City, S=State, C=US" -storetype PKCS12 -keystore netsuite-oauth.p12 -validity 3650
