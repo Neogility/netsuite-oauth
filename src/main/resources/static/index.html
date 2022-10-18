@@ -16,9 +16,11 @@
 		<h1>OAuth2.0 OIDC Login Demo</h1>
 		<div class="container unauthenticated">
 		    Login with Netsuite: <a href="/oauth2/authorization/netsuite">click here</a><br/>
+		    Introspect: <a href="/netsuite/introspect">click here</a><br/>
 		</div>
 		<div class="container authenticated" style="display:none">
-		    Logged in as: <span id="user"></span>
+		    Logged in as: <span id="user"></span><br/>
+		    Introspect: <a href="/netsuite/introspect">click here</a><br/>
 			<div>
 				<a href="/netsuite/q">Netsuite Query</a>
 				<button onClick="query()" class="btn btn-primary">Query</button>

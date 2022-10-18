@@ -35,7 +35,7 @@ public class WebSecurityConfig {
 			.ignoringAntMatchers("/login/oauth2/code/netsuite")
         )
 		.authorizeRequests(a -> a
-			.antMatchers("/actuator/**","/error").permitAll()
+			.antMatchers("/netsuite/auth/oauth2/v1/userinfo","/actuator/**","/error").permitAll()
 			.anyRequest().authenticated()
 		)
 		.logout(l -> l
