@@ -7,3 +7,8 @@ Small Application to Demonstrate the OIDC/OAuth2 flow with Netsuite as the OIDC 
 3. Update the src/main/resources/application.properties with the `client-id`, `client-secret` and `account-id` from Netsuite
 4. run `./mvnw clean spring-boot:run`
 5. Open a browser to https://localhost:8443
+6. Click "Login with Netsuite: click here"
+7. Login to Netsuite with your credentials
+8. If needed, select the role configured in the OIDC setup in step 1.
+9. Click "Continue"
+10. Notice the 400 error from the userinfo endpoint.
