@@ -6,6 +6,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.hateoas.config.HypermediaWebClientConfigurer;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.client.reactive.ReactorClientHttpConnector;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
@@ -18,6 +19,10 @@ import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 import org.springframework.security.web.util.matcher.NegatedRequestMatcher;
 import org.springframework.web.reactive.function.client.WebClient;
+
+import io.netty.handler.logging.LogLevel;
+import reactor.netty.http.client.HttpClient;
+import reactor.netty.transport.logging.AdvancedByteBufFormat;
 
 
 
@@ -85,7 +90,13 @@ public class WebSecurityConfig {
           new ServletOAuth2AuthorizedClientExchangeFilterFunction(clientRegistrationRepository, 
           authorizedClientRepository);
         oauth2.setDefaultOAuth2AuthorizedClient(true);
-        return configurer.registerHypermediaTypes(WebClient.builder()).apply(oauth2.oauth2Configuration()).build();
+        
+        HttpClient httpClient = HttpClient
+        		  .create()
+        		  .wiretap("reactor.netty.http.client.HttpClient", 
+        		    LogLevel.DEBUG, AdvancedByteBufFormat.TEXTUAL);
+        
+        return configurer.registerHypermediaTypes(WebClient.builder().clientConnector(new ReactorClientHttpConnector(httpClient))).apply(oauth2.oauth2Configuration()).build();
     }
 	
 
