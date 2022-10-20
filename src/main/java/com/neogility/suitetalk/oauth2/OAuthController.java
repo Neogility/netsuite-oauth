@@ -1,6 +1,7 @@
 package com.neogility.suitetalk.oauth2;
 
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.Map;
 
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -13,8 +14,15 @@ public class OAuthController {
 
     @GetMapping("/user")
     public Map<String, Object> user(@AuthenticationPrincipal OAuth2User principal) {
-
-        return Collections.singletonMap("name", principal.getAttribute("id"));
+    	Map<String, Object> userDetails = new HashMap<>();
+    	userDetails.put("email", principal.getAttribute("email"));
+    	userDetails.put("company_id", principal.getAttribute("company_id"));
+    	userDetails.put("company_name", principal.getAttribute("company_name"));
+    	userDetails.put("role_id", principal.getAttribute("role_id"));
+    	userDetails.put("role_name", principal.getAttribute("role_name"));
+    	userDetails.put("entity_id", principal.getAttribute("entity_id"));
+    	userDetails.put("sub", principal.getAttribute("sub"));
+        return userDetails;
     }
 
 }

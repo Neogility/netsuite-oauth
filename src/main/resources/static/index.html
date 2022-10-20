@@ -35,7 +35,7 @@
 	</body>
 	<script type="text/javascript">
 		$.get("/user", function(data) {
-			$("#user").html(data.name);
+			$("#user").html(data.email+" / "+data.entity_id);
 			$(".unauthenticated").hide()
 			$(".authenticated").show()
 		});

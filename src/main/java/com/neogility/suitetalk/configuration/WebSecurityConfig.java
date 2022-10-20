@@ -20,6 +20,8 @@ import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 import org.springframework.security.web.util.matcher.NegatedRequestMatcher;
 import org.springframework.web.reactive.function.client.WebClient;
 
+import com.neogility.suitetalk.oauth2.netsuite.NetsuiteAuthorizationRequestResolver;
+
 import io.netty.handler.logging.LogLevel;
 import reactor.netty.http.client.HttpClient;
 import reactor.netty.transport.logging.AdvancedByteBufFormat;
@@ -32,7 +34,7 @@ public class WebSecurityConfig {
 	
 	
     @Bean
-    protected SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+    protected SecurityFilterChain filterChain(HttpSecurity http, NetsuiteAuthorizationRequestResolver resolver) throws Exception {
 		HttpsURLConnection.setDefaultHostnameVerifier((hostname, session) -> true);
 		http
 		.csrf(c -> c
@@ -50,7 +52,9 @@ public class WebSecurityConfig {
 			//.authenticationEntryPoint(new HttpStatusEntryPoint(HttpStatus.UNAUTHORIZED))
 			.defaultAuthenticationEntryPointFor(new HttpStatusEntryPoint(HttpStatus.UNAUTHORIZED), new NegatedRequestMatcher(new AntPathRequestMatcher("/login/oauth2/code/netsuite")))
 		)
-        .oauth2Login();
+        .oauth2Login()
+        .authorizationEndpoint()
+        .authorizationRequestResolver(resolver);
 
         return http.build();
     }
@@ -62,6 +66,7 @@ public class WebSecurityConfig {
     @Bean
     public WebSecurityCustomizer webSecurityCustomizer() {
         return (web) -> web
+        		.debug(true)
         		.ignoring().antMatchers(
         				// the standard favicon URI
         				"/favicon.ico",
