@@ -90,3 +90,4 @@ Temporary Items
 
 *.obj
 /build*.properties
+application-local.properties
