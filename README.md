@@ -4,7 +4,7 @@ Small Application to Demonstrate the OIDC/OAuth2 flow with Netsuite as the OIDC 
 # Instructions for Setup
 1. Configure OIDC Provider in Netsuite: https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_160855172780.html
 2. Clone this repository
-3. Update the src/main/resources/application.properties with the `client-id`, `client-secret` and `account-id` from Netsuite
+3. Update the src/main/resources/application.properties with the `account-id`, `client-id`, and `client-secret` from Netsuite
 4. run the application: `./mvnw clean spring-boot:run`
 5. Open a browser to https://localhost:8443
 6. Click "Login with Netsuite: click here"
